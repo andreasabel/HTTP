@@ -31,7 +31,14 @@ module Network.Stream
    , failParse -- :: String -> Result a
    , failWith  -- :: ConnError -> Result a
    , failMisc  -- :: String -> Result a
+#if MIN_VERSION_base(4,4,0)
+   , module Data.Either
+#endif
    ) where
+
+#if MIN_VERSION_base(4,4,0)
+import Data.Either()  -- instance Monad (Either e)
+#endif
 
 data ConnError
  = ErrorReset
