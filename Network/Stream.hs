@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Network.Stream
@@ -65,6 +66,14 @@ fmapE f a = do
 -- | This is the type returned by many exported network functions.
 type Result a = Either ConnError   {- error  -}
                        a           {- result -}
+
+-- @instance Monad Result@ follows from this instance, added in base-4.4:
+#if !MIN_VERSION_base(4,4,0)
+instance Monad (Either e) where
+  Left e  >>= k = Left e
+  Right a >>= k = k a
+  return = Right
+#endif
 
 -- | Streams should make layering of TLS protocol easier in future,
 -- they allow reading/writing to files etc for debugging,
